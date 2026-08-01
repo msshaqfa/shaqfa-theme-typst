@@ -1,5 +1,4 @@
-output.pdf
-*.pdf
-*.svg
+/output.pdf
+/main.pdf
 /tmp/
 .cache/
