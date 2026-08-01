@@ -17,20 +17,29 @@
   // ---- CNRS logo (top-left) ----
   #place(top + left, dy: 5mm, dx: 5mm,
     image("figures/logos/cnrs_logo.svg", height: 3.5cm))
+
+  #place(top + right, dy: 5mm, dx: -5mm,
+    image("figures/logos/LEM3_Logo.png", height: 3.5cm))
   
   #place(bottom + right, dy: 0mm, dx: 0mm,
     image("figures/logos/MS_cover_logo.pdf", height: 7.5cm))
 
   // ---- Title block ----
-  #place(top + left, dy: 48mm, dx: 25mm, block(width: 24cm)[
+  #place(top + left, dy: 60mm, dx: 25mm, block(width: 24cm)[
     #set text(size: 24pt)
     #text(weight: "bold")[
-      #text(fill: shaqfa-red, font: ("DejaVu Sans Mono", "Courier New"))[libharmonics]
-      : A #text(font: ("DejaVu Sans Mono", "Courier New"))[C++] Library for Morphological Analysis and Spectral Galerkin Methods]
+      #text(fill: shaqfa-red, font: ("Courier New"))[libharmonics]
+      : A #text(font: ("Courier New"))[C++] Library for Morphological Analysis and Spectral Galerkin Methods]
 
     #v(1.0cm)
     #set text(size: 14pt)
-    #text(fill: black, weight: "bold")[#author]
+    #text(fill: black, weight: "bold")[#author 
+      #link("https://orcid.org/0000-0002-0136-2391")[
+        #box(fill: rgb("#A6CE39"), radius: 50%, inset: (x: 0.35em, y: 0.1em))[
+          #text(white, size: 0.65em, weight: "bold")[iD]
+        ]
+      ]
+    ]
 
     #v(0.25cm)
     #set text(size: 12pt)
@@ -48,29 +57,11 @@
   ]
 ]
 
-// ---------- TOC ----------
-#section-heading[Outline]
-
-#slide[
-  = Table of Contents
-
-  #v(0.5cm)
-  #outline(indent: 3em, title: none)
-]
-
 // ---------- Introduction ----------
 #section-heading[Introduction]
 
-#slide[
-  = Introduction
-
-  Welcome to this presentation built with the *shaqfa* theme
-  for Typst.
-
-  - Clean academic look with a dark header bar
-  - 16:9 aspect ratio
-  - Gradient footer in EPFL red tones
-  - Square bullet points
+#centered-breaking("Introduction")[
+  A modern C++ library for morphological analysis\ and spectral Galerkin methods on parametric\ surfaces.
 ]
 
 #subsection-heading[Motivation]
@@ -96,29 +87,76 @@
   + Native Unicode support
   + No dependency headaches
 ]
-
 // ---------- Methodology ----------
 #section-heading[Methodology]
 
-#slide[
-  = Methodology
+#centered-breaking("Methodology", color: shaqfa-black)
 
-  Three main pillars:
+// ---- Spectral parameterization slide ----
+#slide[
+  #grid(columns: (1fr, 1.2fr), rows: (auto, 1fr), gutter: 1.5em,
+    // Title spans both columns
+    grid.cell(colspan: 2)[
+      = Spectral parameterization
+      #v(1.5em)
+    ],
+
+    // Left: figure
+    figure(
+      image("figures/basis_rendering.pdf", width: 100%),
+      caption: "Oblate and prolate spheroidal harmonics basis functions.",
+    ),
+
+    // Right: equation + description
+    [
+      #v(2.5cm)
+      $
+        mat(x(eta, phi); y(eta, phi); z(eta, phi))
+        = sum_(n=0)^(n_(max)) sum_(m = -n)^n
+          A_n^m S_n^m (eta, phi).
+      $
+
+      #v(1.5em)
+      This spectral expansion maps the surface
+      coordinates $(x, y, z)$ onto a basis of
+      spherical harmonics $S_n^m$, weighted
+      by coefficients $A_n^m$.
+    ],
+  )
+  #slide-cite(<Shaqfa2024_SOH>, <Shaqfa2025_remesh>)
 ]
 
-// ---- Columns demo ----
-#slide(composer: (1fr, 1fr))[
-  = Theory
+// ---- Overlay animations demo ----
+#slide[
+  = Step-by-step Reveal
 
-  Rigorous mathematical framework built on established results.
+  + First point is always visible
+  #pause
+  + Second point appears on click
+  #pause
+  + Third point appears on next click
 
-  #lorem(18)
-][
-  = Computation
+  #v(0.5cm)
+  #uncover("3-")[
+    *Note:* This conclusion only appears with the third point.
+  ]
 
-  Efficient numerical methods that scale linearly with input size.
+  #v(1.5cm)
+  #align(left, block(width: 40%, fill: gray.lighten(55%), inset: 0.8em, radius: 4pt)[
+    #set text(size: 8pt, font: ("DejaVu Sans Mono", "Courier New"))
+    #show raw: set text(size: 8pt)
+    ````typ
+    + First point is always visible
+    #pause
+    + Second point appears on click
+    #pause
+    + Third point appears on next click
 
-  #lorem(18)
+    #uncover("3-")[
+      *Note:* appears with third point
+    ]
+    ````
+  ])
 ]
 
 #slide[
@@ -143,14 +181,7 @@
 // ---------- Results ----------
 #section-heading[Results]
 
-#slide[
-  = Results
-
-  Our method achieves state-of-the-art performance across
-  all standard benchmarks.
-
-  #lorem(20)
-]
+#centered-breaking("Results", color: shaqfa-cyan)
 
 #slide[
   = Discussion
@@ -163,14 +194,32 @@
 // ---------- Conclusion ----------
 #section-heading[Conclusion]
 
+#centered-breaking("Conclusion", color: shaqfa-red)
+#centered-breaking("Conclusion", color: shaqfa-black)
+
 #slide[
   = Conclusion
-
   This work presents a comprehensive framework combining
   theoretical rigour with practical efficiency.
 
   Future work will explore extensions to higher-dimensional
   problems and real-time applications.
+]
+
+// ---------- References ----------
+#slide[
+  = References
+
+  // Auto-cite all bib entries (hidden, white on white)
+  #set text(size: 1pt, fill: white)
+  #{
+    let bib = read("refs.bib")
+    let keys = bib.matches(regex("@\\w+\\{([^,]+),"))
+    keys.map(m => cite(label(m.captures.at(0)))).join()
+  }
+
+  #set text(size: 9pt, fill: black)
+  #bibliography("refs.bib", title: none)
 ]
 
 #slide[
@@ -181,8 +230,34 @@
     #text(size: 1.5em, weight: "bold")[*Questions?*]
 
     #v(1cm)
-    #text(fill: black)[#author]\
+    #text(fill: black)[#author]
+    #link("https://orcid.org/0000-0002-0136-2391")[
+      #box(fill: rgb("#A6CE39"), radius: 50%, inset: (x: 0.35em, y: 0.1em))[
+        #text(white, size: 0.8em, weight: "bold")[iD]
+      ]
+      \ #text(fill: rgb("#A6CE39"), size: 0.9em)[orcid.org/0000-0002-0136-2391]
+    ]\
+    #v(0.3cm)
     #text(fill: black)[#address]\
     #text(fill: black)[#email]
   ]
 ]
+
+
+// ---------- TOC ----------
+#section-heading[Outline]
+
+#slide[
+  = Table of Contents
+
+  #v(0.5cm)
+  #outline(indent: 3em, title: none)
+]
+
+// #slide[
+#outline(
+  title: [List of Figures],
+  target: figure.where(kind: image),
+)
+// ]
+

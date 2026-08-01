@@ -156,11 +156,92 @@
   ssub-state.update([])
 }
 
+/// Bottom-of-slide reference helper — auto-extracts from refs.bib.
+/// Usage: `#slide-cite(<Shaqfa2024_SOH>)` or `#slide-cite(<A>, <B>)`
+#let slide-cite(..keys) = {
+  let bib = read("refs.bib")
+
+  let format-entry(key) = {
+    let k = str(key)
+    let pos = bib.position(k + ",")
+    if pos == none {
+      return [??#k]
+    }
+    let block = bib.slice(pos + k.len())
+
+    let get-field(field) = {
+      let m = block.match(regex(field + "\\s*=\\s*\\{([^}]+)\\}"))
+      if m != none {
+        m.captures.at(0).trim(regex("\\s+"), at: start).trim(regex("\\s+"), at: end)
+      }
+    }
+
+    let a = get-field("author")
+    let t = get-field("title")
+    let y = get-field("year")
+
+    if a == none { a = k }
+    if t == none { t = k }
+    if y == none { y = "" }
+
+    let dot = if a.ends-with(".") { "" } else { "." }
+
+    [#a#dot (#y), *"#t"*.]
+  }
+
+  place(
+    bottom + left,
+    dy: 0.0cm, dx: -0.5cm,
+    [
+      #set text(size: 8.5pt, weight: "bold", fill: black)
+      #keys.pos().map(format-entry).join([\ ])
+    ],
+  )
+}
+
 /// Config that disables header + footer and clears all margins (for cover / breaking slides).
 #let no-header-footer = config-page(
   header: none, footer: none,
   margin: (top: 0cm, bottom: 0cm, left: 0cm, right: 0cm),
 )
+
+/// Dark cover frame — three staggered horizontal bars (EPFL style).
+#let dark-cover(
+  title: none, author: none,
+  supervisor: none, institute: none,
+) = slide(config: no-header-footer +
+    config-common(freeze-slide-counter: true) +
+    config-store(show-page-num: false))[
+  // Red bar — right half, top
+  #place(top + left, dy: 18mm, dx: 85mm,
+    rect(width: 90mm, height: 20mm, fill: shaqfa-red))
+  // Dark-gray bar — center-left, middle
+  #place(top + left, dy: 38mm, dx: 60mm,
+    rect(width: 50mm, height: 20mm, fill: shaqfa-black))
+  // Cyan bar — full left, bottom
+  #place(top + left, dy: 58mm, dx: 15mm,
+    rect(width: 70mm, height: 20mm, fill: shaqfa-cyan))
+
+  // Title on red bar (centered)
+  #place(top + left, dy: 19mm, dx: 89mm,
+    block(width: 82mm, align(center,
+      text(white, size: 1.8em, weight: "bold", title))))
+  // Author & supervisor on black bar (centered)
+  #place(top + left, dy: 39mm, dx: 62.6mm,
+    block(width: 46mm, align(center, {
+      set text(white)
+      if author != none [
+        #text(size: 1em, weight: "bold", author)\
+      ]
+      if supervisor != none [
+        #text(size: 0.85em, supervisor)
+      ]
+    })))
+  // Institute on cyan bar (centered)
+  #place(top + left, dy: 59mm, dx: 15mm,
+    block(width: 70mm, align(center,
+      text(white, size: 1em, institute))))
+]
 
 /// Cover frame — three horizontal coloured bars.
 #let cover-slide(
@@ -187,11 +268,57 @@
     if author != none {
       text(size: 1em, weight: "bold", author)
     }
-    if supervisor != none [
-      \ #text(size: 0.85em, supervisor)
-    ]
   })
   // Institute on cyan bar
   #place(top + left, dy: 57mm, dx: 1.2cm,
     text(white, size: 1em, institute))
+]
+
+/// Breaking slide — colored right-side bar (section divider).
+/// Usage: `#breaking-slide[= Section Title]` or `#breaking-slide(color: shaqfa-black)[...]`
+#let breaking-slide(body, color: shaqfa-red) = slide(
+  config: no-header-footer + config-common(freeze-slide-counter: true)
+)[
+  // White side (left ~57%)
+  // Colored bar on right ~43%
+  #place(top + right, dy: 0pt, dx: 0pt,
+    rect(width: 43%, height: 90mm, fill: color))
+
+  // Content on the left ~57%
+  #align(horizon, block(width: 57%, inset: (left: 1.5cm, right: 1cm))[
+    #body
+  ])
+]
+
+/// Centered breaking slide — splits the word at midpoint, black | white.
+/// Optional body content goes below the split word.
+#let centered-breaking(text-str, color: shaqfa-red, ..body) = slide(
+  config: no-header-footer + config-common(freeze-slide-counter: true)
+)[
+  // Colored bar on right half
+  #place(top + right, dy: 0pt, dx: 0pt,
+    rect(width: 50%, height: 101%, fill: color))
+
+  // Split word
+  #{
+    let mid = calc.floor(text-str.len() / 2)
+    let left-half  = text-str.slice(0, mid)
+    let right-half = text-str.slice(mid)
+    [
+      // Split word — vertically centered, a bit higher
+      #v(2.5cm)
+      #grid(columns: (50%, 50%), rows: auto, gutter: 0pt,
+        align(right, text(black, size: 2em, weight: "bold")[#left-half]),
+        align(left,  text(white, size: 2em, weight: "bold")[#right-half]),
+      )
+      #if body.pos().len() > 0 [
+        #v(1cm)
+        #pad(left: 1.5cm)[
+          #set align(left)
+          #set text(size: 14pt, weight: "regular")
+          #body.pos().join()
+        ]
+      ]
+    ]
+  }
 ]
