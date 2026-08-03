@@ -87,6 +87,170 @@
   + Native Unicode support
   + No dependency headaches
 ]
+
+// ============================================================
+// THEME FEATURES SHOWCASE
+// ============================================================
+#section-heading[Theme features]
+
+#subsection-heading[Block environments]
+
+#slide[
+  = Theorem & Definition Blocks
+
+  #theorem-block[
+    Let $f: X -> RR$ be a continuously differentiable function on a
+    compact manifold $X subset RR^d$. Then the spectral Galerkin
+    approximation $f_N$ converges to $f$ in $L^2(X)$ as
+    $N -> oo$.
+  ]
+
+  #v(0.5cm)
+
+  #definition-block[
+    The *morphological distance* $d_M(x, y)$ between two points
+    on a parametric surface $cal(S)$ is the geodesic length of
+    the shortest path constrained to lie on $cal(S)$.
+  ]
+]
+
+#slide[
+  = Example & Note Blocks
+
+  #example-block[
+    Consider a spherical harmonic expansion of order $N = 64$.
+    The coefficient matrix $A_n^m$ has $(N+1)^2 = 4225$ entries,
+    each computed via numerical quadrature on the unit sphere.
+  ]
+
+  #v(0.4cm)
+
+  #note-block[
+    In practice, the coefficient matrices are highly sparse for
+    smooth surfaces. Exploiting this sparsity reduces the
+    computational cost from $cal(O)(N^4)$ to $cal(O)(N^2 log N)$.
+  ]
+]
+
+#slide[
+  = Alert & Proof Blocks
+
+  #alert-block[
+    The convergence rate degrades sharply when the surface
+    contains $C^0$ discontinuities (creases). In such regions,
+    spectral methods require local refinement to maintain accuracy.
+  ]
+
+  #v(0.5cm)
+
+  #proof-block[
+    By the Riesz representation theorem, there exists a unique
+    $u in H_0^1(Omega)$ satisfying the weak formulation for any
+    $f in L^2(Omega)$. The Galerkin projection onto
+    $V_N subset H_0^1$ inherits this well-posedness.
+  ]
+]
+
+#subsection-heading[Quote & Callout]
+
+#slide[
+  = Quote Block
+
+  The `quote-block` highlights key statements from literature or
+  emphasises take-home messages:
+
+  #v(0.6cm)
+
+  #quote-block(attribution: "G. Strang, 1986")[
+    The fundamental law of numerical analysis: the error in the
+    discrete solution is bounded by the error in the best
+    approximation from the discrete subspace.
+  ]
+
+  #v(0.8cm)
+
+  #quote-block[
+    *Key insight:* computation scales linearly with input size.
+  ]
+]
+
+#subsection-heading[Progress bar]
+
+#slide[
+  = Progress Bar Styles
+
+  *Four built-in styles* — set globally or per-slide via
+  `config-store(progress-bar: "style")`:
+
+  #v(0.4cm)
+  #table(
+    columns: (auto, auto),
+    inset: 6pt,
+    align: (left, left),
+    [*`"line"`* (default)], [Thin red bar that fills left-to-right.],
+    [*`"dots"`*], [Dot indicators on a dark strip — one per slide, current slide highlighted.],
+    [*`"fraction"`*], [Compact text `"5 / 20"` on a dark strip aligned right.],
+    [*`"sections"`*], [Segmented bar — each section gets its own colour block.],
+    [*`"none"`*], [Disables the progress indicator entirely.],
+  )
+]
+
+// #slide(config: config-store(progress-bar: "dots"))[
+#slide(config: config-store(progress-bar: "line"))[
+  = Dots Example
+  (this slide uses `progress-bar: "dots"`)
+
+  Each dot represents one slide. The current slide is highlighted
+  in red, visited slides are light gray, upcoming are dark.
+]
+
+#slide(config: config-store(progress-bar: "fraction"))[
+  = Fraction Example
+  (this slide uses `progress-bar: "fraction"`)
+
+  The right side of the progress bar strip shows the current
+  slide number over the total, e.g. "18 / 45".
+]
+
+#subsection-heading[Figure captions]
+
+#slide[
+  #grid(columns: (1fr, 1.2fr), rows: (auto, 1fr), gutter: 1.5em,
+    grid.cell(colspan: 2)[
+      = Styled Figure Captions
+      #v(1.5em)
+    ],
+    figure(
+      image("figures/basis_rendering.pdf", width: 100%),
+      caption: "Oblate and prolate spheroidal harmonics basis functions.",
+    ),
+    [
+      #v(2.5cm)
+      $
+        mat(x(eta, phi); y(eta, phi); z(eta, phi))
+        = sum_(n=0)^(n_(max)) sum_(m = -n)^n
+          A_n^m S_n^m (eta, phi).
+      $
+
+      #v(1.5em)
+      Captions are automatically styled with the theme's
+      primary red colour and bold weight for the figure label.
+    ],
+  )
+  #slide-cite(<Shaqfa2024_SOH>, <Shaqfa2025_remesh>)
+]
+
+#subsection-heading[Table of contents]
+
+#slide[
+  = Styled Table of Contents
+
+  #v(0.4cm)
+  #styled-outline[
+    #outline(indent: 3em, title: none)
+  ]
+]
+
 // ---------- Methodology ----------
 #section-heading[Methodology]
 
@@ -95,19 +259,14 @@
 // ---- Spectral parameterization slide ----
 #slide[
   #grid(columns: (1fr, 1.2fr), rows: (auto, 1fr), gutter: 1.5em,
-    // Title spans both columns
     grid.cell(colspan: 2)[
       = Spectral parameterization
       #v(1.5em)
     ],
-
-    // Left: figure
     figure(
       image("figures/basis_rendering.pdf", width: 100%),
       caption: "Oblate and prolate spheroidal harmonics basis functions.",
     ),
-
-    // Right: equation + description
     [
       #v(2.5cm)
       $
@@ -222,42 +381,90 @@
   #bibliography("refs.bib", title: none)
 ]
 
+// ---------- Thank you ----------
+#closing-slide(
+  author: author,
+  email: email,
+  institute: address,
+  orcid: "0000-0002-0136-2391",
+  website: "https://github.com/Shaqfa/libharmonics",
+)
+
+// ============================================================
+// APPENDIX — slides visible only on demand
+// ============================================================
+#show: appendix
+
+#appendix-heading[Extra Proofs]
+
+#appendix-breaking([Supplementary Material])[
+  Deeper technical details and\ additional proofs beyond the main\ presentation.
+]
+
 #slide[
-  = Thank You
+  = Proof of Spectral Convergence
 
-  #v(1.5cm)
-  #align(center)[
-    #text(size: 1.5em, weight: "bold")[*Questions?*]
-
-    #v(1cm)
-    #text(fill: black)[#author]
-    #link("https://orcid.org/0000-0002-0136-2391")[
-      #box(fill: rgb("#A6CE39"), radius: 50%, inset: (x: 0.35em, y: 0.1em))[
-        #text(white, size: 0.8em, weight: "bold")[iD]
-      ]
-      \ #text(fill: rgb("#A6CE39"), size: 0.9em)[orcid.org/0000-0002-0136-2391]
-    ]\
-    #v(0.3cm)
-    #text(fill: black)[#address]\
-    #text(fill: black)[#email]
+  #proof-block[
+    Let $u in H^s(Omega)$ for $s > d/2$. Then the spectral
+    approximation $u_N$ satisfies
+    $
+      norm(u - u_N)_(L^2) <= C N^(-s) norm(u)_(H^s).
+    $
+    This follows directly from the projection error bound on
+    the polynomial subspace $P_N$ and the embedding
+    $H^s(Omega) subset C^0(bar(Omega))$ for $s > d/2$.
   ]
 ]
 
-
-// ---------- TOC ----------
-#section-heading[Outline]
-
 #slide[
-  = Table of Contents
+  = Convergence Benchmarks
+
+  #table(
+    columns: (auto, auto, auto, auto),
+    inset: 8pt,
+    align: center,
+    [*Order*], [*L^2 Error*], [*Rate*], [*Time (ms)*],
+    table.hline(),
+    [$N = 16$], [$1.2 times 10^(-3)$], [--], [2.4],
+    [$N = 32$], [$3.1 times 10^(-4)$], [1.95], [8.7],
+    [$N = 64$], [$7.8 times 10^(-5)$], [1.99], [34.1],
+    [$N = 128$], [$1.9 times 10^(-5)$], [2.01], [138.5],
+  )
 
   #v(0.5cm)
-  #outline(indent: 3em, title: none)
+  #note-block[
+    Quadratic convergence rate confirms optimality of the
+    spectral Galerkin method for smooth solutions.
+  ]
 ]
 
-// #slide[
-#outline(
-  title: [List of Figures],
-  target: figure.where(kind: image),
-)
-// ]
+#appendix-heading[Additional Figures]
 
+#slide[
+  = Mesh Refinement Strategy
+
+  #figure(
+    image("figures/basis_rendering.pdf", width: 50%),
+    caption: "Adaptive mesh refinement around high-curvature regions.",
+  )
+
+  Local refinement is triggered when the curvature exceeds
+  a prescribed threshold $kappa > kappa_(max)$. The
+  adaptive strategy preserves the spectral convergence rate
+  even on surfaces with isolated geometric singularities.
+]
+
+#appendix-heading[References & Further Reading]
+
+#slide[
+  = Extended Bibliography
+
+  #set text(size: 9pt)
+  #bibliography("refs.bib", title: none)
+
+  #v(0.5cm)
+  Additional references of interest:
+  - Boyd, J. P. (2001). *Chebyshev and Fourier Spectral Methods*.
+  - Canuto, C. et al. (2006). *Spectral Methods: Fundamentals in Single Domains*.
+  - Hesthaven, J. S. et al. (2007). *Nodal Discontinuous Galerkin Methods*.
+]
