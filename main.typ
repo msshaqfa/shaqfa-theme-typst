@@ -174,6 +174,41 @@
   ]
 ]
 
+#subsection-heading[Column callout]
+
+#slide(composer: (1fr, 28%))[
+  = Column Callout
+
+  The `callout-box` sits in a narrow sidebar alongside
+  the main content. It's ideal for key takeaways,
+  caveats, or references that shouldn't interrupt the
+  primary flow.
+
+  #v(0.5cm)
+
+  This slide uses a two-column layout via the Touying
+  `composer:` parameter — no extra code needed beyond
+  the callout box itself.
+][
+  #callout-box(label: "Key Takeaway", color: shaqfa-red)[
+    The spectral method converges quadratically
+    for smooth surfaces.
+  ]
+
+  #v(0.6cm)
+
+  #callout-box(label: "Caveat", color: shaqfa-cyan)[
+    Convergence degrades near $C^0$ creases.
+    Local refinement is required.
+  ]
+
+  #v(0.6cm)
+
+  #callout-box(label: "Ref.", color: shaqfa-black)[
+    See Shaqfa et al. (2024) for the full convergence proof.
+  ]
+]
+
 #subsection-heading[Progress bar]
 
 #slide[
@@ -423,7 +458,7 @@
     columns: (auto, auto, auto, auto),
     inset: 8pt,
     align: center,
-    [*Order*], [*L^2 Error*], [*Rate*], [*Time (ms)*],
+    [*Order*], [*$L^2$ Error*], [*Rate*], [*Time (ms)*],
     table.hline(),
     [$N = 16$], [$1.2 times 10^(-3)$], [--], [2.4],
     [$N = 32$], [$3.1 times 10^(-4)$], [1.95], [8.7],

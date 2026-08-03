@@ -532,6 +532,29 @@
 ]
 
 // ============================================================
+// CALLOUT BOX — sidebar-style callout for column layouts
+// ============================================================
+
+/// Sidebar callout box — best used in a two-column layout.
+/// Usage:
+///   #slide(composer: (1fr, 25%))[= Main][ #callout-box(label: "Takeaway")[...] ]
+#let callout-box(
+  body,
+  label: "Note",
+  color: shaqfa-red,
+) = block(
+  fill: color.lighten(85%),
+  stroke: (left: 4pt + color),
+  inset: 0.7em,
+  radius: 4pt,
+)[
+  #text(size: 0.85em, weight: "bold", fill: color)[#label]
+  #v(0.3em)
+  #set text(size: 0.85em)
+  #body
+]
+
+// ============================================================
 // CLOSING SLIDE
 // ============================================================
 
