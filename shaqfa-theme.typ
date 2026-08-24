@@ -269,9 +269,11 @@
 
 /// Bottom-of-slide reference helper — auto-extracts from refs.bib.
 /// Usage: `#slide-cite(<Shaqfa2024_SOH>)` or `#slide-cite(<A>, <B>)`
-#let slide-cite(..keys) = {
-  let bib = read("refs.bib")
+// #let slide-cite(..keys) = {
+//   let bib = read("../references.bib")
 
+#let slide-cite(bib-file: "../references.bib", ..keys) = {
+  let bib = read(bib-file)
   let format-entry(key) = {
     let k = str(key)
     let pos = bib.position(k + ",")
