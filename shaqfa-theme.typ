@@ -1,7 +1,8 @@
 // ============================================================
 // Shaqfa theme  —  Touying presentation theme
 // ============================================================
-#import "@preview/touying:0.5.3": *
+#import "@preview/touying:0.5.5": *
+// #import "@preview/touying:0.7.4": * // to support the new `hide` method for hiding content (e.g., for progressive reveal of bullet points)
 
 // ---- Color Palette (exact RGB values from Beamer) ----
 #let shaqfa-red    = rgb("#A32034")   // beamerbackgroundred
@@ -171,7 +172,9 @@
   self = utils.merge-dicts(
     self,
     config-page(header: header, footer: none, fill: white, header-ascent: pb-ascent(pb-style)),
-    config-common(subslide-preamble: none),
+    config-common(subslide-preamble: none,
+                  show-hide-set-list-marker-none: true,
+                  ),
   )
 
   touying-slide(
