@@ -609,11 +609,31 @@
 
 /// Styled outline with coloured square markers matching the theme.
 /// Usage: `#styled-outline[#outline(indent: 3em, title: none)]`
+#let seen-outline-entries = state("seen-outline-entries", ())
 #let styled-outline(body) = {
-  show outline.entry: it => {
-    [ #box(fill: shaqfa-red, radius: 2pt, width: 0.55em, height: 0.55em, inset: 0pt) \ #it ]
+  // Tighten vertical block margins for packed line-by-line layout
+  show outline.entry: set block(above: 0.8em, below: 0.8em)
+  context {
+    seen-outline-entries.update(())
+
+    show outline.entry: it => context {
+      let entry-key = if it.has("element") and it.element != none {
+        it.element.body
+      } else {
+        it.body
+      }
+
+      let visited = seen-outline-entries.get()
+      if entry-key in visited {
+        none
+      } else {
+        seen-outline-entries.update(v => v + (entry-key,))
+        it // Rendered directly without marker box
+      }
+    }
+
+    body
   }
-  body
 }
 
 // ============================================================
