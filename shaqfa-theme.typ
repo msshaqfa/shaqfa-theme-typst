@@ -300,9 +300,27 @@
     if t == none { t = k }
     if y == none { y = "" }
 
-    let dot = if a.ends-with(".") { "" } else { "." }
+    // BibTeX names: "Family, Given" (including particles such as van Rees).
+    // Also accept "Given Family" and retain braced organization names.
+    let abbreviate-author(name) = {
+      let name = name.trim()
+      if name.starts-with("{") { return name.trim("{").trim("}") }
+      let parts = name.split(",").map(part => part.trim())
+      let family = parts.first()
+      let given = if parts.len() > 1 { parts.last() } else {
+        let words = name.split(regex("\\s+"))
+        family = words.last()
+        words.slice(0, words.len() - 1).join(" ")
+      }
+      let initials = given.split(regex("\\s+")).filter(word => word != "").map(word => {
+        word.split("-").map(part => part.first() + ".").join("-")
+      }).join(" ")
+      let suffix = if parts.len() > 2 { ", " + parts.at(1) } else { "" }
+      if initials == "" { family + suffix } else { initials + " " + family + suffix }
+    }
+    a = a.split(regex("\\s+and\\s+")).map(abbreviate-author).join(" and ")
 
-    [#a#dot (#y), *"#t"*.]
+    [#a (#y), *"#t"*.]
   }
 
   place(
