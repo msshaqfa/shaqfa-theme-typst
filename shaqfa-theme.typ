@@ -590,11 +590,13 @@
   orcid: none,
   website: none,
 ) = slide[
-  = Thank You
 
-  #v(1.0cm)
+  // #place(top + left, dy: 3.5cm, dx: 0.0cm,
+  //   image("figures/science/keywords.png", height: 9.0cm)
+  // )  
+  #v(6.0cm)
   #align(center)[
-    #text(size: 1.8em, weight: "bold", fill: shaqfa-red)[*Questions?*]
+    #text(size: 2.8em, weight: "bold", fill: shaqfa-red)[*Merci de votre attention*]
 
     #v(1.2cm)
     #set text(size: 14pt, fill: black)
@@ -605,20 +607,24 @@
     #email \
     #institute
 
-    #v(0.5cm)
-    #if orcid != none [
-      #link("https://orcid.org/" + orcid)[
-        #box(fill: rgb("#A6CE39"), radius: 50%, inset: (x: 0.35em, y: 0.1em))[
-          #text(white, size: 0.75em, weight: "bold")[iD]
-        ]
-        \ #text(fill: rgb("#A6CE39"), size: 0.85em)[orcid.org/#orcid]
-      ]
-    ]
-    #if website != none [
-      #v(0.3cm)
-      #link(website)[#text(fill: shaqfa-red, size: 0.9em)[#website]]
-    ]
+    // #v(0.5cm)
+    // #if orcid != none [
+    //   #link("https://orcid.org/" + orcid)[
+    //     #box(fill: rgb("#A6CE39"), radius: 50%, inset: (x: 0.35em, y: 0.1em))[
+    //       #text(white, size: 0.75em, weight: "bold")[iD]
+    //     ]
+    //     \ #text(fill: rgb("#A6CE39"), size: 0.85em)[orcid.org/#orcid]
+    //   ]
+    // ]
+    // #if website != none [
+    //   #v(0.3cm)
+    //   #link(website)[#text(fill: shaqfa-red, size: 0.9em)[#website]]
+    // ]
+    // 
+
   ]
+  
+  
 ]
 
 // ============================================================
